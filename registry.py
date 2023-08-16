@@ -1,9 +1,3 @@
-
-'''
-    ##  Implementation of registry
-    ##  150114822 - Eren Ulaş
-'''
-
 from socket import *
 import threading
 import select

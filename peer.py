@@ -1,9 +1,3 @@
-'''
-    ##  Implementation of peer
-    ##  Each peer has a client and a server side that runs on different threads
-    ##  150114822 - Eren Ulaş
-'''
-
 from socket import *
 import threading
 import time
