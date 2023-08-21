@@ -25,4 +25,4 @@ It is a p2p chat application that uses centralized index approach. It consists o
 ## Run the Mongo DB Docker Instance
 
 1. type in your terminal `docker build -t db Database` to build the instance.
-2. type `docker run --name db --rm -p 3306:3306 db `
+2. type `docker run --name db -d -p 27017:27017 db `

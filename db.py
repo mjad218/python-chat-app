@@ -6,13 +6,18 @@ class DB:
 
     # db initializations
     def __init__(self):
-        self.client = MongoClient('mongodb://localhost:27017/')
+        self.client = MongoClient('mongodb://localhost:27017/?readPreference=primary&ssl=false&directConnection=true')
         self.db = self.client['p2p-chat']
+        list_of_collections = self.db.list_collection_names()  
+        if not "accounts" in list_of_collections: 
+            self.db.create_collection( 'accounts')
+            self.db.create_collection( 'online_peers')
 
 
     # checks if an account with the username exists
     def is_account_exist(self, username):
-        if self.db.accounts.find({'username': username}).count() > 0:
+        account = self.db.accounts.find_one({'username': username})
+        if account is not None and account.count() > 0:
             return True
         else:
             return False
@@ -34,7 +39,7 @@ class DB:
 
     # checks if an account with the username online
     def is_account_online(self, username):
-        if self.db.online_peers.find({"username": username}).count() > 0:
+        if self.db.online_peers.find_one({"username": username}).count() > 0:
             return True
         else:
             return False
