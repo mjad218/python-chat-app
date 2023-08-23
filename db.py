@@ -6,18 +6,13 @@ class DB:
 
     # db initializations
     def __init__(self):
-        self.client = MongoClient('mongodb://localhost:27017/?readPreference=primary&ssl=false&directConnection=true')
+        self.client = MongoClient('mongodb://localhost:27017/')
         self.db = self.client['p2p-chat']
-        list_of_collections = self.db.list_collection_names()  
-        if not "accounts" in list_of_collections: 
-            self.db.create_collection( 'accounts')
-            self.db.create_collection( 'online_peers')
 
 
     # checks if an account with the username exists
     def is_account_exist(self, username):
-        account = self.db.accounts.find_one({'username': username})
-        if account is not None and account.count() > 0:
+        if self.db.accounts.find_one({'username': username}):
             return True
         else:
             return False
@@ -29,7 +24,7 @@ class DB:
             "username": username,
             "password": password
         }
-        self.db.accounts.insert(account)
+        self.db.accounts.insert_one(account)
 
 
     # retrieves the password for a given username
@@ -39,7 +34,7 @@ class DB:
 
     # checks if an account with the username online
     def is_account_online(self, username):
-        if self.db.online_peers.find_one({"username": username}).count() > 0:
+        if self.db.online_peers.find_one({"username": username}):
             return True
         else:
             return False
@@ -52,12 +47,13 @@ class DB:
             "ip": ip,
             "port": port
         }
-        self.db.online_peers.insert(online_peer)
+        self.db.online_peers.insert_one(online_peer)
     
 
     # logs out the user 
     def user_logout(self, username):
-        self.db.online_peers.remove({"username": username})
+        acc=self.db["online_peers"].find_one({"username": username})
+        self.db["online_peers"].delete_one(acc)
     
 
     # retrieves the ip address and the port number of the username

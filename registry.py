@@ -1,3 +1,9 @@
+
+'''
+    ##  Implementation of registry
+    ##  150114822 - Eren Ulaş
+'''
+
 from socket import *
 import threading
 import select
@@ -52,6 +58,7 @@ class ClientThread(threading.Thread):
                         self.tcpClientSocket.send(response.encode())
                 #   LOGIN    #
                 elif message[0] == "LOGIN":
+                    print(message)
                     # login-account-not-exist is sent to peer,
                     # if an account with the username does not exist
                     if not db.is_account_exist(message[1]):
@@ -172,7 +179,7 @@ class UDPServer(threading.Thread):
     # resets the timer for udp server
     def resetTimer(self):
         self.timer.cancel()
-        self.timer = threading.Timer(3, self.waitHelloMessage)
+        self.timer = threading.Timer(21, self.waitHelloMessage)
         self.timer.start()
 
 
